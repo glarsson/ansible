@@ -1,26 +1,39 @@
 ---
-- name: Install standard software on Windows
+- name: Install standard software on Windows using Winget
   hosts: all
   gather_facts: no
   vars:
     ansible_connection: winrm
     ansible_winrm_transport: ntlm
     ansible_winrm_server_cert_validation: ignore
-  collections:
-    - community.windows
 
   tasks:
-    - name: Install Chocolatey
-      community.windows.win_chocolatey:
-        name: chocolatey
-        state: present
+    - name: Ensure Winget is available
+      win_command: winget --version
+      register: winget_check
+      ignore_errors: yes
 
-    - name: Install standard software packages
-      community.windows.win_chocolatey:
-        name:
-          - notepadplusplus
-          - 7zip
-          - googlechrome
-          - firefox
-          - adobereader
-        state: present
+    - name: Install Winget if not present
+      win_command: >
+        Invoke-WebRequest -Uri "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" -OutFile "$env:USERPROFILE\Downloads\winget.msixbundle"; 
+        Add-AppxPackage -Path "$env:USERPROFILE\Downloads\winget.msixbundle"
+      when: winget_check.failed
+
+    - name: Update Winget repositories
+      win_command: winget source update
+      when: not winget_check.failed
+
+    - name: Install Notepad++
+      win_command: winget install -e --id Notepad++.Notepad++
+
+    - name: Install 7-Zip
+      win_command: winget install -e --id 7zip.7zip
+
+    - name: Install Google Chrome
+      win_command: winget install -e --id Google.Chrome
+
+    - name: Install Mozilla Firefox
+      win_command: winget install -e --id Mozilla.Firefox
+
+    - name: Install Adobe Acrobat Reader
+      win_command: winget install -e --id Adobe.Acrobat.Reader.64-bit
