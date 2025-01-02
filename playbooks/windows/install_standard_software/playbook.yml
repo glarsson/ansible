@@ -1,0 +1,20 @@
+---
+- name: Install standard software on Windows
+  hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: Install Chocolatey
+      win_chocolatey:
+        name: chocolatey
+        state: present
+
+    - name: Install standard software packages
+      win_chocolatey:
+        name:
+          - notepadplusplus
+          - 7zip
+          - googlechrome
+          - firefox
+          - adobereader
+        state: present
