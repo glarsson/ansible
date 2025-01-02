@@ -1,0 +1,12 @@
+---
+- name: Add local admin user
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Create _admin user
+      user:
+        name: _admin
+        password: "{{ 'PassWord1234!' | password_hash('sha512') }}"
+        shell: /bin/bash
+        state: present 

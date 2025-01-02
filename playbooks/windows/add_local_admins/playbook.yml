@@ -1,0 +1,14 @@
+---
+- name: Add local admin user on Windows
+  hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: Create _admin user
+      win_user:
+        name: _admin
+        password: PassWord1234!
+        state: present
+        groups:
+          - Administrators
+        password_never_expires: yes 
