@@ -1,0 +1,18 @@
+---
+- name: Create a local user "test" on Windows
+  hosts: all
+  gather_facts: yes
+  vars:
+    ansible_connection: winrm
+    ansible_winrm_transport: ntlm
+    ansible_winrm_server_cert_validation: ignore
+
+  tasks:
+    - name: Create user "test"
+      win_user:
+        name: test
+        password: PassWord1234!
+        state: present
+        password_never_expires: yes
+        groups:
+          - Users
