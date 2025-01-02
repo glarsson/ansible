@@ -1,0 +1,6 @@
+---
+collections:
+  - name: ansible.windows
+    version: latest
+  - name: community.windows
+    version: latest 

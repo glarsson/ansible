@@ -6,15 +6,17 @@
     ansible_connection: winrm
     ansible_winrm_transport: ntlm
     ansible_winrm_server_cert_validation: ignore
+  collections:
+    - community.windows
 
   tasks:
     - name: Install Chocolatey
-      win_chocolatey:
+      community.windows.win_chocolatey:
         name: chocolatey
         state: present
 
     - name: Install standard software packages
-      win_chocolatey:
+      community.windows.win_chocolatey:
         name:
           - notepadplusplus
           - 7zip
