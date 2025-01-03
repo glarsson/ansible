@@ -1,0 +1,24 @@
+  ---
+  - name: Ensure Winget is available
+    win_command: winget --version
+    register: winget_check
+    ignore_errors: yes
+
+  - name: Install Winget if not present
+    win_command: >
+      Invoke-WebRequest -Uri "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" -OutFile "$env:USERPROFILE\Downloads\winget.msixbundle";
+      Add-AppxPackage -Path "$env:USERPROFILE\Downloads\winget.msixbundle"
+    when: winget_check.failed
+
+  - name: Update Winget repositories
+    win_command: winget source update
+    when: not winget_check.failed
+
+  - name: Install software packages
+    win_command: winget install -e --id {{ item }}
+    loop:
+      - Notepad++.Notepad++
+      - 7zip.7zip
+      - Google.Chrome
+      - Mozilla.Firefox
+      - Adobe.Acrobat.Reader.64-bit
