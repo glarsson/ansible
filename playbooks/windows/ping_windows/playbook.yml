@@ -1,0 +1,9 @@
+---
+- name: Ping Windows hosts
+  gather_facts: no
+  collections:
+    - ansible.windows
+
+  tasks:
+    - name: Ping Windows host
+      win_ping:
