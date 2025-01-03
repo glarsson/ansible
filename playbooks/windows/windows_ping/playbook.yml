@@ -1,5 +1,5 @@
 ---
-- name: Ping Windows hosts
+- name: Ping Windows hosts - TESTING IF THIS GETS UPDDATED IN AWX
   gather_facts: no
   collections:
     - ansible.windows
