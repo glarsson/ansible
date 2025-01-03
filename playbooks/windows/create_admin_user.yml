@@ -1,0 +1,15 @@
+---
+- name: Create an administrative user "admin_user" on Windows
+  hosts: all
+  gather_facts: yes
+  collections:
+    - ansible.windows
+
+  tasks:
+    - name: Create user "admin_user"
+      ansible.windows.win_user:
+        name: admin_user
+        password: PassWord1234!
+        state: present
+        groups:
+          - Administrators 
